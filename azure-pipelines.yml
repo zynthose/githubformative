@@ -1,79 +1,61 @@
 name: CI/CD Pipeline
-
-on:
+'on':
   push:
     branches:
       - main
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build
-      run: npm run build
-
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
   test:
     runs-on: ubuntu-latest
-
     needs: build
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Run tests
-      run: npm test
-
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Tests and Code Quality Checks
+        run: |
+          npm run test
+          # Add other code quality checks here
   deploy:
     runs-on: ubuntu-latest
-
     needs: test
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Azure CLI
-      uses: azure/cli@v1
-      with:
-        azcliversion: '2.25.0'
-
-    - name: Deploy to Azure
-      run: |
-        # Add your Azure deployment commands here
-
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Deploy to Staging
+        run: |
+          # Add deployment script or commands
+          # e.g., az webapp deploy ...
   notify:
     runs-on: ubuntu-latest
-
-    needs: [build, test, deploy]
-
+    needs:
+      - build
+      - test
+      - deploy
     steps:
-    - name: Notify on failure
-      if: failure()
-      run: echo "The CI/CD pipeline failed. Please check the workflow logs."
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          # Add notification mechanism (e.g., Slack, email)
+          # Notify the team about the failure
+          echo "Build or Deployment failed. Please check the pipeline logs."
 
-    - name: Notify on success
-      if: success()
-      run: echo "The CI/CD pipeline succeeded."
 
 
