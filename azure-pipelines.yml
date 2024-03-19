@@ -31,18 +31,8 @@ stages:
 
 - stage: Notify
   jobs:
-  - job: NotifyOnSuccess
-    displayName: 'Notify on Success'
-    dependsOn: [Build, Test, Deploy]
-    condition: succeeded()
+  - job: Notify
+    displayName: 'Notify on Finish'
     steps:
     - script: |
-        echo "The CI/CD pipeline completed successfully."
-
-  - job: NotifyOnFailure
-    displayName: 'Notify on Failure'
-    dependsOn: [Build, Test, Deploy]
-    condition: failed()
-    steps:
-    - script: |
-        echo "The CI/CD pipeline failed. Please check the logs."
+        echo "The CI/CD pipeline has completed."
