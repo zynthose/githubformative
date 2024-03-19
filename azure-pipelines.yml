@@ -1,0 +1,38 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - script: |
+        # Your build commands here
+      displayName: 'Build'
+
+- stage: Test
+  jobs:
+  - job: Test
+    steps:
+    - script: |
+        # Your test commands here
+      displayName: 'Test'
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    steps:
+    - script: |
+        # Your deployment commands here
+      displayName: 'Deploy'
+
+- stage: Notify
+  jobs:
+  - job: Notify
+    displayName: 'Notify on Finish'
+    steps:
+    - script: |
+        echo "The CI/CD pipeline has completed."
